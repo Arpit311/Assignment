@@ -10,6 +10,11 @@ import { InputNode } from './nodes/inputNode';
 import { LLMNode } from './nodes/llmNode';
 import { OutputNode } from './nodes/outputNode';
 import { TextNode } from './nodes/textNode';
+import { ConstantNode } from './nodes/constantNode';
+import { MathNode } from './nodes/mathNode';
+import { FilterNode } from './nodes/filterNode';
+import { LoggerNode } from './nodes/loggerNode';
+import { APIRequestNode } from './nodes/apiRequestNode';
 
 import 'reactflow/dist/style.css';
 
@@ -20,6 +25,11 @@ const nodeTypes = {
   llm: LLMNode,
   customOutput: OutputNode,
   text: TextNode,
+  constant: ConstantNode,
+  math: MathNode,
+  filter: FilterNode,
+  logger: LoggerNode,
+  apiRequest: APIRequestNode,
 };
 
 const selector = (state) => ({
@@ -76,11 +86,12 @@ export const PipelineUI = () => {
               position,
               data: getInitNodeData(nodeID, type),
             };
-      
+
+            console.log(`Node created with ID: ${newNode.id}`);
             addNode(newNode);
           }
         },
-        [reactFlowInstance]
+        [reactFlowInstance, getNodeID, addNode]
     );
 
     const onDragOver = useCallback((event) => {
@@ -90,7 +101,7 @@ export const PipelineUI = () => {
 
     return (
         <>
-        <div ref={reactFlowWrapper} style={{width: '100wv', height: '70vh'}}>
+        <div ref={reactFlowWrapper} style={{width: '100wv', height: '70vh', backgroundColor: '#F9FAFB'}}>
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
@@ -105,7 +116,7 @@ export const PipelineUI = () => {
                 snapGrid={[gridSize, gridSize]}
                 connectionLineType='smoothstep'
             >
-                <Background color="#aaa" gap={gridSize} />
+                <Background color="#E5E7EB" gap={gridSize} />
                 <Controls />
                 <MiniMap />
             </ReactFlow>
